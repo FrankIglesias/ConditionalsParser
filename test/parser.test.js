@@ -11,7 +11,7 @@ describe('parser', () => {
       expect(parse('false')).to.deep.equal(false)
     })
     it('detect if then else expresions', () => {
-      expect(() => parse('if true then true else true')).to.deep.equal({
+      expect(parse('if true then true else true')).to.deep.equal({
    "condition": true,
    "branch1": true,
    "branch2": true
