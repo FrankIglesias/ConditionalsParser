@@ -10,6 +10,9 @@ describe('parser', () => {
   it('parses a false', () => {
     expect(parse('false')).to.deep.equal(false)
   })
+  it('parses a number', () => {
+    expect(parse('1')).to.deep.equal(1)
+  })
   it('detect if then else expresions', () => {
     expect(parse('if true then true else true')).to.deep.equal({
       "condition": true,
