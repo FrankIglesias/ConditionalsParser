@@ -4,21 +4,62 @@ import { expect } from 'chai'
 import parse from '../src/parser'
 
 describe('parser', () => {
-  it('parses a true', () => {
-    expect(parse('true')).to.deep.equal(true)
+  it('parses an open and close tag', () => {
+    expect(parse('<B></B>')).to.deep.equal({
+      type: "B",
+      properties: [],
+      children: []
+    })
   })
-  it('parses a false', () => {
-    expect(parse('false')).to.deep.equal(false)
+
+  it('fails with a non closed tag', () => {
+    expect(() => parse('<A>')).to.throw()
   })
-  it('detect if then else expresions', () => {
-    expect(parse('if true then true else true')).to.deep.equal({
-      "condition": true,
-      "branch1": true,
-      "branch2": true
+
+  it('parses a self closing tag', () => {
+    expect(parse('<img />')).to.deep.equal({
+      type: "img",
+      properties: []
     });
   })
 
-  it('fails when it should', () => {
-    expect(() => parse('abc')).to.throw()
+  it('fails with a non named tag', () => {
+    expect(() => parse('</>')).to.throw()
+  })
+
+  it('fails with a non closed tag 2', () => {
+    expect(() => parse('<B></A>')).to.throw()
+  })
+
+  it('fails with a non closed tag 2', () => {
+    expect(parse('<A><B/><B/></A>')).to.deep.equal({
+      type: "A",
+      properties: [],
+      children: [
+        [
+          {
+            type: "B",
+            properties: []
+          },
+          {
+            type: "B",
+            properties: []
+          }
+        ]
+      ]
+    })
+  })
+
+  it('parses a self closing tag', () => {
+    expect(parse('<img src="url"></img>')).to.deep.equal({
+      type: "img",
+      properties: [
+        {
+          property: "src",
+          value: "url"
+        }
+      ],
+      children: []
+    });
   })
 })
